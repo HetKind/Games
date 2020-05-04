@@ -1,0 +1,58 @@
+import random
+import sys
+yes = ['y', 'yes', 'ya', 'yep', 'yup', 'yaaaaas', 'totally', 'totes', 'sure', 'you bet', 'ok', 'k', 'okay',
+       'okie dokie', 'alright', 'alrighty', 'sounds good', 'for sure', 'sure thing', 'certainly', 'definitely',
+       'of course', 'gladly', 'indubitably', 'absolutely', 'indeed', 'undoubtedly', 'yeah', 'yeah yeah yeah', 'fine',
+       'affirmative', 'very well', 'obviously', 'aye', 'forsooth', 'yea', 'verily', 'surely']
+no = ['n', 'no', 'nah', 'nope', 'no way', 'sorry', 'not now', 'certainly not', 'by no means', 'i shall not',
+      'not likely', 'no thanks!', 'i think not ', 'unfortunately not', 'i’m slammed', 'not possible', 'not this time',
+      'not for me, thanks', 'it’s not my thing', 'i think i’ll pass ', 'not today, thanks', 'i wish i could but…',
+      'i’m taking sometime', 'maybe another time', 'i’m not interested']
+terminate = ['bye', 'nevermind', 'goodbye', 'exit', 'quit', 'stop', 'leave', 'terminate', 'abolish', 'abort', 'adjourn',
+             'annul', 'cancel', 'cease', 'complete', 'conclude', 'cut off', 'determine', 'discharge', 'discontinue',
+             'dismiss', 'dissolve', 'eliminate', 'expire', 'halt', 'break', 'cease', 'close', 'drop', 'end', 'halt',
+             'kill', 'pause', 'put an end to', 'quit', 'stall']
+heads   =   ['a', '0', 'heads', 'A']
+tails   =   ['b', '1','tails', 'B']
+
+
+#game_count = 0
+def game():
+    game_count = 0 #no. of time the coin is flipped ie user total count
+    win_count = 0 # no of times the user guessed correctly
+    play_again  =   'y' #play again vairable
+    while play_again in yes:
+        print("Flipping the coin.........")
+        result  =   str(odd_even())
+    #print(result)
+        check   =   str(user_guess())
+        #global game_count
+        game_count += 1
+        if check == result:
+            print("It's "+result.lower()+'!')
+            win_count += 1
+        else:
+            print("Aww it's " + result.lower() + '! :(')
+        #flip_result()
+        if check == result:
+            print("Yayyy you win!!!")
+        else:
+            print("you lose ugh")
+        while True: #play again thingy
+            play_again = input('Try again? \n> ')
+            if play_again in yes or play_again in no:
+                break
+            elif play_again in terminate:
+                sys.exit("Order terminated :(")
+    print("You guessed "+ str(game_count)+ ' times.')
+    percent = win_count / game_count * 100
+    print('You were correct '+str(win_count)+ " times, that's "+str(round(percent, 2))+"%.")
+    res = input('Quit game? \n[a] Yes \n[b] No\n')
+    if res in yes:
+        sys.exit("Thank you for playing.")
+    elif res in no:
+        print('Please wait....')
+        print("Restarting the game.")
+        return game()
+    elif res in terminate:
+        sys.exit("Game terminated.")
