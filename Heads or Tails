@@ -56,3 +56,32 @@ def game():
         return game()
     elif res in terminate:
         sys.exit("Game terminated.")
+
+
+
+def user_guess():
+    while True:
+        res =   input("What's your guess? \n[a] Heads \n[b] Tails\n")
+        if res in heads:
+            return "HEADS" #meaning heads
+        elif res in tails:
+            return 'TAILS' #meaning tails
+        elif res in terminate:
+            sys.exit("Game terminated :(")
+        else:
+            print_message()
+
+#odd_or_even from random number heads tails function
+def odd_even():
+    x = random.randint(1, 99)
+    if x%2==0:
+        return 'HEADS'#meaning heads
+    else:
+        return 'TAILS'  #meaning tails
+
+# error message for invalid input
+def print_message():
+    print('I\'m sorry, I did not understand your selection. Please enter the corresponding letter for your response.')
+
+#call game
+game()
