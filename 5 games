@@ -1,0 +1,674 @@
+import random
+import sys
+import secrets
+money  = float(100)
+yes = ['y', 'yes', 'ya', 'yep', 'yup', 'yaaaaas', 'totally', 'totes', 'sure', 'you bet', 'ok', 'k', 'okay',
+       'okie dokie', 'alright', 'alrighty', 'sounds good', 'for sure', 'sure thing', 'certainly', 'definitely',
+       'of course', 'gladly', 'indubitably', 'absolutely', 'indeed', 'undoubtedly', 'yeah', 'yeah yeah yeah', 'fine',
+       'affirmative', 'very well', 'obviously', 'aye', 'forsooth', 'yea', 'verily', 'surely']
+no = ['n', 'no', 'nah', 'nope', 'no way', 'sorry', 'not now', 'certainly not', 'by no means', 'i shall not',
+      'not likely', 'no thanks!', 'i think not ', 'unfortunately not', 'i’m slammed', 'not possible', 'not this time',
+      'not for me, thanks', 'it’s not my thing', 'i think i’ll pass ', 'not today, thanks', 'i wish i could but…',
+      'i’m taking sometime', 'maybe another time', 'i’m not interested']
+terminate = ['bye', 'nevermind', 'goodbye', 'exit', 'quit', 'stop', 'leave', 'terminate', 'abolish', 'abort', 'adjourn',
+             'annul', 'cancel', 'cease', 'complete', 'conclude', 'cut off', 'determine', 'discharge', 'discontinue',
+             'dismiss', 'dissolve', 'eliminate', 'expire', 'halt', 'break', 'cease', 'close', 'drop', 'end', 'halt',
+             'kill', 'pause', 'put an end to', 'quit', 'stall']
+heads   =   ['a', '1', 'heads', 'A']
+tails   =   ['b', '2','tails', 'B']
+one = ['1',   'one',  'ONE',  'a',    'A']
+two = ['2',   'two',  'TWO',  'b',    'B']
+three = ['3',   'three',  'THREE',  'c',    'C']
+four = ['4',   'four',  'FOUR',  'd',    'D']
+five = ['5',   'five',  'FIVE',  'e',    'E']
+six = ['6',   'six',  'SIX',  'f',    'F']
+even = ['1',   'one',  'ONE',  'a',    'A', 'cho', 'even']
+ood = ['2',   'two',  'TWO',  'b',    'B', 'hao', 'odd']
+
+colors = ['heart', 'diamonds', 'spades', 'clubs']
+deck = [[value, color] for value in range(1, 14) for color in colors]
+#deck_of_cards = list(deck)
+
+
+def all_games():
+    print('Welcome')
+    while True:
+        res = input("What would you like to guess? \n[a] Coin Flip \n[b] Dice Roll\n[c] Cho-Chan\n[d] Card Pick\n[e] Roulette\n[f]Quit Game\n")
+        if res in one:
+            coin_game()
+        elif res in two:
+            dice_game()
+        elif res in three:
+            cho_chan()
+        elif res in four:
+            higher_card_wins()
+        elif res in five:
+            roulette()
+        elif res in terminate or res in six:
+            sys.exit("Game terminated :(")
+        else:
+            print_message()
+
+
+# game_count = 0
+#game no. 1
+def coin_game():
+    print("【=◈/ Coin Flip \◈=】")
+    def game():
+        global money
+        game_count = 0 #no. of time the coin is flipped ie user total count
+        win_count = 0 # no of times the user guessed correctly
+        play_again  =   'y' #play again vairable
+        while play_again in yes:
+            bet = bet_money()
+            print("Flipping the coin.........")
+            result  =   str(odd_even())
+            #print(result)
+            check   =   str(user_guess())
+            #global game_count
+            print("*******")
+            print(bet)
+            game_count += 1
+            if check == result:
+                money += bet
+                print("It's "+result.lower()+'!')
+                win_count += 1
+            else:
+                money -= bet
+                print("Aww it's " + result.lower() + '! :(')
+            #flip_result()
+            if check == result:
+                print("Yayyy you win!!!")
+                print("Balance:" + str(money))
+            else:
+                print("you lose ugh")
+                print("Balance:" + str(money))
+            while True: #play again thingy
+                play_again = input('Try again? \n> ')
+                if play_again in yes or play_again in no:
+                    break
+                elif play_again in terminate:
+                    sys.exit("Order terminated :(")
+        print("You guessed "+ str(game_count)+ ' times.')
+        percent = win_count / game_count * 100
+        print('You were correct '+str(win_count)+ " times, that's "+str(round(percent, 2))+"%.")
+        print('Your total funds are ' + str(money) + '$')
+        while True:
+            res = input('Quit Coin Flip? \n[a] Yes \n[b] No\n[c] Switch Game\n')
+            if res in yes or res in one:
+                sys.exit("Thank you for playing. Your funds are "+str(money)+"$.")
+            elif res in no or res in two:
+                print('Please wait....')
+                print("Restarting the game.")
+                return game()
+            elif res in three:
+                return all_games()
+            elif res in terminate:
+                sys.exit("Game terminated.Your funds are "+str(money)+"$.")
+
+
+    def user_guess():
+        while True:
+            res =   input("What's your guess? \n[a] Heads \n[b] Tails\n")
+            if res in heads:
+                return "HEADS" #meaning heads
+            elif res in tails:
+                return 'TAILS' #meaning tails
+            elif res in terminate:
+                sys.exit("Game terminated :(")
+            else:
+                print_message()
+
+    # odd_or_even from random number heads tails function
+    def odd_even():
+        x = random.randint(1, 99)
+        if x % 2 == 0:
+            return 'HEADS'  # meaning heads
+        else:
+            return 'TAILS'  # meaning tails
+
+    return game()
+
+#game no. 2
+def dice_game():
+    print('_/ Virtual Dice Roller \_')
+
+    def game():
+        global money
+        game_count = 0  # no. of time the coin is flipped ie user total count
+        win_count = 0  # no of times the user guessed correctly
+        play_again = 'y'  # play again vairable
+        while play_again in yes:
+            check = str(user_guess())
+            bet = bet_money()
+            print("Rolling the dice.........")
+            result = str(dice_value())
+            print(result)
+            # global game_count
+            game_count += 1
+            if check == result:
+                money += bet
+                print("It's " + result + '!')
+                win_count += 1
+            else:
+                money -= bet
+                print("Aww it's " + result + ' ! :(')
+            # flip_result()
+            if check == result:
+                print("Yayyy you win!!!")
+                print("Balance:" + str(money))
+            else:
+                print("you lose ugh")
+                print("Balance:" + str(money))
+            while True:  # play again thingy
+                play_again = input('Try again? \n> ')
+                if play_again in yes or play_again in no:
+                    break
+                elif play_again in terminate or terminate.upper():
+                    sys.exit("Order terminated :(")
+        print("You guessed " + str(game_count) + ' times.')
+        percent = win_count / game_count * 100
+        print('You were correct ' + str(win_count) + " times, that's " + str(round(percent, 2)) + "%.")
+        print('Your total funds are ' + str(money) + '$')
+        while True:
+            res = input('Quit Dice Roll? \n[a] Yes \n[b] No\n[c] Switch Game\n')
+            if res in yes or res in one:
+                sys.exit("Thank you for playing. Your funds are "+str(money)+"$.")
+            elif res in no or res in two:
+                print('Please wait....')
+                print("Restarting the game.")
+                return game()
+            elif res in three:
+                return all_games()
+            elif res in terminate or terminate.upper():
+                sys.exit("Game terminated. Your funds are "+str(money)+"$.")
+
+    def user_guess():
+        while True:
+            res = input("What's your guess? \n[a] One \n[b] Two\n[c] Three \n[d] Four\n[e] Five \n[f] Six\n")
+            if res in one:
+                return 1
+            elif res in two:
+                return 2
+            elif res in three:
+                return 3
+            elif res in four:
+                return 4
+            elif res in five:
+                return 5
+            elif res in six:
+                return 6
+            elif res in terminate:
+                sys.exit("Game terminated :(")
+            else:
+                print_message()
+
+    #function for the number of shuffles to get the dice value
+    def no_of_shuffles():
+
+        secret_list2 = secrets.SystemRandom()
+        user_input = 2#input("just fucking type")
+        rrr = random.random()#generate a random decimal
+        sss =    rrr*float(user_input)#coming up with new number by muliplying the generated no. with the user_input input
+        cts = str(sss)#conversion to string to create a list for removing the decimal point and "0
+        newlist=[x for x in cts[2:]]#creating a list from float without the "decimal point" and "0"
+        newlist= list(map(int, newlist))#converting the string elements in list to integer
+        num1= secret_list2.choice(newlist)#random choice from the new created list
+        shuffle = secret_list2.choice(newlist)
+        for x in range(shuffle):
+            (random.shuffle(newlist))
+        shit = secret_list2.choice(newlist)
+        second_term = (((user_input*(shuffle+1))-(shit))+1)+random.randint(1, 77)
+        #condition for num1 is 0
+        if num1 == 0:#when the num1 random selection is 0
+        #makes a new random choice from list
+            when_num1_is_zero = 0#secret_list2.choice(newlist)
+            if when_num1_is_zero == 0:# if the new choice is also 0
+                return 0
+            else:
+                return(random.randint((shuffle + 1), second_term))
+        else:
+            return(random.randint((shuffle+1),second_term))
+        #this function behaves different when its not assigned to a vairable
+        input_number = no_of_shuffles()
+
+    #funcion for the dice number
+    def dice_value():
+        secret_list = secrets.SystemRandom()
+
+        #generates 6 lists
+        list    =   [secret_list.sample(range(1, 7), 6) for x in range(6)]
+        #print(list)
+
+        #selects a random list from the total lists
+        choice  = secret_list.choice(list)
+        #print(str(choice)+'random choice')
+
+        #shuffling the selected list
+        for x in range(no_of_shuffles()):#can call directly the no_of_shuffle fun or use the 'input_number' vairable from up above as the function behaviour is weird
+            random.shuffle(choice)
+            #print(choice)
+
+        #the dice number
+        dice_number =   secret_list.choice(choice)
+        return(dice_number)
+        #print(choice)
+    return game()
+
+#game nu. 3
+def cho_chan():
+    print('_/ Cho-Chaaan \_')
+    temp_dice = random.randint(1, 6)
+
+    def game():
+        global money
+        game_count = 0  # no. of time the coin is flipped ie user total count
+        win_count = 0  # no of times the user guessed correctly
+        play_again = 'y'  # play again vairable
+        while play_again in yes:
+            print("Rolling two dices.........")
+            bet = bet_money()
+            check = str(user_guess())
+            result = str(sum_of_two())
+            # global game_count
+            game_count += 1
+            if check == result:
+                money += bet
+                print("It's " + result + '!')
+                win_count += 1
+            else:
+                money -= bet
+                print("Aww it's " + result + ' ! :(')
+            # flip_result()
+            if check == result:
+                print("Yayyy you win!!!")
+                print("Balance:" + str(money))
+            else:
+                print("you lose ugh")
+                print("Balance:" + str(money))
+            while True:  # play again thingy
+                play_again = input('Try again? \n> ')
+                if play_again in yes or play_again in no:
+                    break
+                elif play_again in terminate or terminate.upper():
+                    sys.exit("Order terminated :(")
+        print("You guessed " + str(game_count) + ' times.')
+        percent = win_count / game_count * 100
+        print('You were correct ' + str(win_count) + " times, that's " + str(round(percent, 2)) + "%.")
+        print('Your total funds are ' + str(money) + '$')
+        while True:
+            res = input('Quit Dice Roll? \n[a] Yes \n[b] No\n[c] Switch Game\n')
+            if res in yes or res in one:
+                sys.exit("Thank you for playing. Your funds are "+str(money)+"$.")
+            elif res in no or res in two:
+                print('Please wait....')
+                print("Restarting the game.")
+                return game()
+            elif res in three:
+                return all_games()
+            elif res in terminate or terminate.upper():
+                sys.exit("Game terminated.Your funds are "+str(money)+"$.")
+
+    def user_guess():
+        while True:
+            res = input("What's your guess? Will the sum total of numbers showing on the two dice will be 'Chō' (even) or 'Han' (odd) \n[a] Cho (Even) \n[b] Han (Odd)\n")
+            if res in one or res.lower() in even:
+                return 'EVEN'
+            elif res in two or res.lower() in ood:
+                return 'ODD'
+            elif res in terminate:
+                sys.exit("Game terminated :(")
+            else:
+                print_message()
+
+    def sum_of_two():
+        dice_one=dice_value()
+        dice_two=temp_dice
+        print('Dice one is '+str(dice_one)+ ' and dice two is ' +str(dice_two))
+        morty = dice_one+dice_two
+        print("The sum is "+str(morty))
+        if morty % 2 == 0:
+            return 'EVEN'  # meaning heads
+        else:
+            return 'ODD'  # meaning tails
+    #function for the number of shuffles to get the dice value
+    def no_of_shuffles():
+
+        secret_list2 = secrets.SystemRandom()
+        user_input = 2#input("just fucking type")
+        rrr = random.random()#generate a random decimal
+        sss =    rrr*float(user_input)#coming up with new number by muliplying the generated no. with the user_input input
+        cts = str(sss)#conversion to string to create a list for removing the decimal point and "0
+        newlist=[x for x in cts[2:]]#creating a list from float without the "decimal point" and "0"
+        newlist= list(map(int, newlist))#converting the string elements in list to integer
+        num1= secret_list2.choice(newlist)#random choice from the new created list
+        shuffle = secret_list2.choice(newlist)
+        for x in range(shuffle):
+            (random.shuffle(newlist))
+        shit = secret_list2.choice(newlist)
+        second_term = (((user_input*(shuffle+1))-(shit))+1)+random.randint(1, 77)
+        #condition for num1 is 0
+        if num1 == 0:#when the num1 random selection is 0
+        #makes a new random choice from list
+            when_num1_is_zero = 0#secret_list2.choice(newlist)
+            if when_num1_is_zero == 0:# if the new choice is also 0
+                return 0
+            else:
+                return(random.randint((shuffle + 1), second_term))
+        else:
+            return(random.randint((shuffle+1),second_term))
+        #this function behaves different when its not assigned to a vairable
+        input_number = no_of_shuffles()
+
+    #funcion for the dice number
+    def dice_value():
+        secret_list = secrets.SystemRandom()
+
+        #generates 6 lists
+        list    =   [secret_list.sample(range(1, 7), 6) for x in range(6)]
+        #print(list)
+
+        #selects a random list from the total lists
+        choice  = secret_list.choice(list)
+        #print(str(choice)+'random choice')
+
+        #shuffling the selected list
+        for x in range(no_of_shuffles()):#can call directly the no_of_shuffle fun or use the 'input_number' vairable from up above as the function behaviour is weird
+            random.shuffle(choice)
+            #print(choice)
+
+        #the dice number
+        dice_number =   secret_list.choice(choice)
+        return(dice_number)
+        #print(choice)
+    return game()
+
+#game no. 4
+def higher_card_wins():
+    print('♠♥♣♦  _/\_  ♠♥♣♦ Pick a card ♠♥♣♦  _/\_  ♠♥♣♦')
+    temp_dice = random.randint(1, 6)
+
+    def game():
+        global money
+        game_count = 0  # no. of time the coin is flipped ie user total count
+        win_count = 0  # no of times the user guessed correctly
+        play_again = 'y'  # play again vairable
+        player1=user_name()
+        print('Opponent')
+        player2 = user_name()
+        while play_again in yes:
+            print('*******')
+            print(player1+ ' Vs '+ player2)
+            print('*******')
+            print("Getting the pack of cards ready.........")
+            num = num_of_shuffle_input()
+            print("Shuffling the deck "+str(num)+' times')
+            deck_shuffle(num)
+            print('Now ' + player1+' select a card')
+            temp1= pick_a_card(deck)
+            print(player2+'\n you choose a card too.' )
+            temp2= pick_a_card(deck)
+            player1card = temp1[0]
+            player1suit = temp1[1]
+            player2card = temp2[0]
+            player2suit = temp2[1]
+            bet = bet_money()
+            # global game_count
+            game_count += 1
+            if player1card > player2card:
+                money += bet
+                print(player1 + " has " + str(player1card) + ' of '+ player1suit + '!')
+                win_count += 1
+            elif player1card == player2card:
+                print("omg It's a tie")
+                print(player1 + " has " + str(player1card) + ' of ' + player1suit + '!')
+                print(player2 + " has " + str(player2card) + ' of ' + player2suit + '!')
+            else:
+                money -= bet
+                print("Aww you have  a " + str(player1card) + ' of '+ player1suit + '! :(')
+                print(player2 + " has " + str(player2card) + ' of ' + player2suit + '!')
+            # flip_result()
+            if player1card > player2card:
+                print("Yayyy "+ player1+ " wins!!!")
+                print("Balance:" + str(money))
+            elif player1card == player2card:
+                print('what are the odds huh...')
+                print("Balance:" + str(money))
+            else:
+                print("you lose ugh")
+                print(player2 + " wins!!!")
+                print("Balance:" + str(money))
+            while True:  # play again thingy
+                play_again = input('Try again? \n> ')
+                if play_again in yes or play_again in no:
+                    break
+                elif play_again in terminate or terminate.upper():
+                    sys.exit("Order terminated :(")
+        print("You guessed " + str(game_count) + ' times.')
+        percent = win_count / game_count * 100
+        print('You were correct ' + str(win_count) + " times, that's " + str(round(percent, 2)) + "%.")
+        print('Your total funds are ' + str(money) + '$')
+        while True:
+            res = input('Quit Dice Roll? \n[a] Yes \n[b] No\n[c] Switch Game\n')
+            if res in yes or res in one:
+                sys.exit("Thank you for playing. Your funds are "+str(money)+"$.")
+            elif res in no or res in two:
+                print('Please wait....')
+                print("Restarting the game.")
+                return game()
+            elif res in three:
+                return all_games()
+            elif res in terminate or terminate.upper():
+                sys.exit("Game terminated.Your funds are "+str(money)+"$.")
+
+    def user_guess():
+        while True:
+            res = input("What's your guess? Will the sum total of numbers showing on the two dice will be 'Chō' (even) or 'Han' (odd) \n[a] Cho (Even) \n[b] Han (Odd)\n")
+            if res in one or res.lower() in even:
+                return 'EVEN'
+            elif res in two or res.lower() in ood:
+                return 'ODD'
+            elif res in terminate:
+                sys.exit("Game terminated :(")
+            else:
+                print_message()
+    return game()
+
+#game no. 5
+def roulette():
+    print('♠  _/\_  ♦) R O U L E T † E ♠  _/\_  ♦')
+    def game():
+        global money
+        game_count = 0  # no. of time the coin is flipped ie user total count
+        win_count = 0  # no of times the user guessed correctly
+        play_again = 'y'  # play again vairable
+        ball = random.randint(0,36)
+        while play_again in yes:
+            guess = user_guess()
+            bet = bet_money()
+            print("Spinnnnninnnnnnnnnnnn.........")
+            print('You placed $' + str(bet) + " on " + str(guess)+'.')
+            print('''\n*********************************************\nthe ball lands on ''' + str(ball))
+            print('///////////////////////////////////////////')
+            print('_____________________________________________')
+            # global game_count
+            game_count += 1
+            if guess == ball:
+                print("*****************************")
+                print("*Yayyyyyy omfg win big time!*")
+                print("*****************************")
+                winning_amount = bet * 35
+                print('You won '+str(winning_amount)+'$\nTransfering the winnings to your funds.......')
+                money += winning_amount
+                print('.....trasfer successfull.')
+                print("Balance:" + str(money))
+                win_count += 1
+            elif guess == "even" and ball % 2 == 0:
+                print("Yay you win!")
+                print(str(ball) + ' is EVEN number.')
+                winning_amount = bet
+                print('You won ' + str(winning_amount) + '$\nTransfering the winnings to your funds.......')
+                money += winning_amount
+                print('.....trasfer successfull.')
+                print("Balance:" + str(money))
+                win_count += 1
+            elif guess == "even" and not ball % 2 == 0:
+                money -= bet
+                print("you lose ugh")
+                print("Aww " + str(ball) + ' is ODD number! :(')
+                print("Balance:" + str(money))
+            elif guess == "odd" and ball % 2 == 0:
+                money -= bet
+                print("you lose ugh")
+                print("Aww " + str(ball) + ' is EVEN number! :(')
+                print("Balance:" + str(money))
+
+            elif guess == "odd" and not ball % 2 == 0:
+                print("Yay you win!")
+                print(str(ball) + ' is ODD number.')
+                winning_amount = bet
+                print('You won ' + str(winning_amount) + '$\nTransfering the winnings to your funds.......')
+                money += winning_amount
+                print('.....trasfer successfull.')
+                print("Balance:" + str(money))
+                win_count += 1
+
+            elif guess != ball:
+                money -= bet
+                print("you lose ugh")
+                print('tuest')
+                print("Aww the ball landed on " + str(ball) + ' ! :(')
+                print("Balance:" + str(money))
+
+            while True:  # play again thingy
+                play_again = input('Try again? \n> ')
+                if play_again in yes or play_again in no:
+                    break
+                elif play_again in terminate or terminate.upper():
+                    sys.exit("Order terminated :(")
+        print("You guessed " + str(game_count) + ' times.')
+        percent = win_count / game_count * 100
+        print('You were correct ' + str(win_count) + " times, that's " + str(round(percent, 2)) + "%.")
+        print('Your total funds are ' + str(money) + '$')
+        while True:
+            res = input('Quit Roulette? \n[a] Yes \n[b] No\n[c] Switch Game\n')
+            if res in yes or res in one:
+                sys.exit("Thank you for playing. Your funds are "+str(money)+"$.")
+            elif res in no or res in two:
+                print('Please wait....')
+                print("Restarting the game.")
+                return game()
+            elif res in three:
+                return all_games()
+            elif res in terminate or terminate.upper():
+                sys.exit("Game terminated. Your funds are "+str(money)+"$.")
+
+    def user_guess():
+        while True:
+            res = input("What's your guess? \n[a] Ball \n[b] Even\n[c] Odd \n")
+            if res in one:
+                return the_ball()
+            elif res in two:
+                return 'even'
+            elif res in three:
+                return 'odd'
+            elif res in terminate:
+                sys.exit("Game terminated :(")
+            else:
+                print_message()
+
+    def the_ball():
+        while True:
+            res = input('Choose your number from 0 to 36.\n')
+            if res.isdigit():
+                res = int(res)
+                if res <= 36:
+                    print('Alright cool locked and loaded.......')
+                    print('selected number ' + str(res))
+                    print('NOOOO backsies now')
+                    return res
+                else:
+                    print('There are only 36 number in roulette you dumb fucker')
+            elif res in terminate:
+                sys.exit('Game terminated :(')
+            else:
+                print_message()
+    return game()
+# error message for invalid input
+def print_message():
+    print('I\'m sorry, I did not understand your selection. Please enter the corresponding letter for your response.')
+
+
+
+
+def bet_money():
+    global money
+    res = input('How much would you like to bet?\n')
+    while not res.isdigit():
+        print_message()
+        print("Only integer values are allowed")
+        res = input('Enter amount to bet\n')
+    res=float(res)
+    if res > money:
+        if money == 0:
+            bankrupt()
+            return bet_money()
+        else:
+            print('Non-sufficient funds')
+            print('Your balance is '+str(money)+'$')
+            print("You can only bet up to "+str(money)+'$')
+            return bet_money()
+    elif res < money:
+        return res
+
+    elif res == money:
+        test = input("Are you sure you wanna bet all of your capital?")
+        if test in yes:
+            return res
+        elif test in no:
+            return bet_money()
+        elif res in terminate:
+            sys.exit("Game terminated :(")
+def bankrupt():
+    print("You're bankrupt")
+    print("You have "+str(money))
+    adb = input('Would you like a 100$ loan?\n[a] Yes\n[b] No\n')
+    if adb in yes or adb in one:
+        loan()
+        print('We got your back. Your funds have been updated')
+        print("New balance: "+str(money))
+    elif adb in no or adb in tow:
+        print('Thank you for playing.')
+        sys.exit("Visit again when you're rich!")
+    elif adb in terminate:
+        sys.exit("Game terminated :(")
+def loan():
+    global money
+    money = 100
+    return money
+# call game
+def deck_shuffle(data):
+    for x in range(data):
+        random.shuffle(deck)
+    pass
+
+def num_of_shuffle_input():
+    res = input('How many times would you like to shuffle the deck?\n')
+    while not res.isdigit():
+        print_message()
+        print("Only integer values are allowed")
+        res = input('Enter how many times to shufle?\n')
+    res = int(res)
+    return res
+def pick_a_card(data):
+    input('Enter your lucky number for good luck...\n')
+    alex = random.choice(data)
+    return alex
+def user_name():
+    name = input('Enter you name?\n')
+    if name in terminate:\
+        sys.exit("Game terminated :(")
+    else:
+        return name
+
+all_games()
